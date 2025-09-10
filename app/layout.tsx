@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Header } from '@/app/_components/header'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -13,7 +14,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased`}>
+        <Header />
+
+        <main>{children}</main>
+
+        <footer>&copy; Copyright</footer>
+      </body>
     </html>
   )
 }
