@@ -1,0 +1,19 @@
+{
+  "navbarLinks": {
+    "home": "Home",
+    "about": "About",
+    "profile": "Profile"
+  },
+  "homePage": {
+    "title": "Landing page",
+    "description": "This is a landing page"
+  },
+  "aboutPage": {
+    "title": "About",
+    "description": "This is an about page"
+  },
+  "profilePage": {
+    "title": "Profile",
+    "description": "This is a profile page"
+  }
+}
