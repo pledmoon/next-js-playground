@@ -2,6 +2,14 @@ import type { Metadata } from 'next'
 import { Header } from '@/app/_components/header'
 import '@/app/_styles/globals.css'
 import { type ReactNode } from 'react'
+import { Josefin_Sans } from 'next/font/google'
+
+const josefin = Josefin_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  //weight: ['400', '700'],
+  //variable: '--font-josefin',
+})
 
 export const metadata: Metadata = {
   title: {
@@ -19,12 +27,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-primary-950 min-h-screen text-primary-100 antialiased">
+      <body
+        className={`${josefin.className} min-h-screen bg-primary-950 text-primary-100 flex-col flex antialiased`}
+      >
         <Header />
 
-        <main>{children}</main>
-
-        <footer>&copy; Copyright</footer>
+        <main className="flex-1 px-8 py-12 grid">
+          <div className="max-w-7xl mx-auto w-full">{children}</div>
+        </main>
       </body>
     </html>
   )

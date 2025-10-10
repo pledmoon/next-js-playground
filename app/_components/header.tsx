@@ -1,12 +1,13 @@
 import { Logo } from '@/app/_components/logo'
-import { Nav } from '@/app/_components/nav'
+import Navigation from '@/app/_components/navigation'
 
 export const Header = () => {
   return (
-    <header>
-      <Logo />
-
-      <Nav />
+    <header className="border-b border-primary-900 px-8 py-5">
+      <div className="flex justify-between items-center max-w-7xl mx-auto">
+        <Logo />
+        <Navigation />
+      </div>
     </header>
   )
 }
