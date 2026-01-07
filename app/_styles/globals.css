@@ -32,8 +32,8 @@
     width: 60px;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 8px solid rgba(0, 0, 255, 1);
-    border-right-color: rgba(0, 0, 255, 0);
+    border: 8px solid var(--color-primary-900);
+    border-right-color: var(--color-primary-200);
     animation: rotate 1s infinite linear;
   }
 
@@ -42,7 +42,7 @@
     width: 20px;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 2px solid rgba(0, 0, 255, 1);
+    border: 2px solid var(--color-primary-200);
     border-right-color: transparent;
     animation: rotate 1s infinite linear;
   }
@@ -57,7 +57,7 @@
 /* For data picker */
 .rdp {
   --rdp-cell-size: 32px !important;
-  --rdp-accent-color: #f00 !important;
-  --rdp-background-color: #f00 !important;
+  --rdp-accent-color: var(--color-accent-500) !important;
+  --rdp-background-color: var(--color-accent-600) !important;
   margin: 0 !important;
 }
