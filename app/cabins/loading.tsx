@@ -1,6 +1,6 @@
 import Spinner from '@/app/_components/spinner'
 
-export default function Loading() {
+export default function loading() {
   return (
     <div className="grid items-center justify-center">
       <Spinner />
