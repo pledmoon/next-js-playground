@@ -2,6 +2,7 @@ import { EyeSlashIcon, MapPinIcon, UsersIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import { getCabin } from '@/app/_lib/data-service'
 import { type Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
 interface CabinDetailPageProps {
   params: Promise<{ cabinId: string }>
@@ -9,7 +10,11 @@ interface CabinDetailPageProps {
 
 export const generateMetadata = async ({ params }: CabinDetailPageProps): Promise<Metadata> => {
   const { cabinId } = await params
-  const { name } = await getCabin(cabinId)
+  const cabin = await getCabin(cabinId)
+
+  if (!cabin) notFound()
+
+  const { name } = cabin
 
   return {
     title: `Cabin ${name}`,
@@ -19,6 +24,8 @@ export const generateMetadata = async ({ params }: CabinDetailPageProps): Promis
 export default async function CabinDetailPage({ params }: CabinDetailPageProps) {
   const { cabinId } = await params
   const cabin = await getCabin(cabinId)
+
+  if (!cabin) notFound()
 
   const {
     name,
