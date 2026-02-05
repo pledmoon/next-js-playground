@@ -6,6 +6,12 @@ const nextConfig: NextConfig = {
       new URL('https://xswkhmqtzaeqvufyjedn.supabase.co/storage/v1/object/public/**'),
     ],
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+      //hmrRefreshes: true,
+    },
+  },
 }
 
 export default nextConfig
