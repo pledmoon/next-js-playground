@@ -1,6 +1,7 @@
+import type { Cabin } from '@/app/_types/cabin-card.type'
+import type { Settings } from '@/app/_types/settings.type'
 import { eachDayOfInterval } from 'date-fns'
 import { supabase } from '@/app/_lib/supabase'
-import { Cabin } from '@/app/_types/cabin-card.type'
 import { notFound } from 'next/navigation'
 
 /////////////
@@ -119,8 +120,10 @@ export async function getBookedDatesByCabinId(cabinId) {
   return bookedDates
 }
 
-export async function getSettings() {
+export async function getSettings(): Promise<Settings> {
   const { data, error } = await supabase.from('settings').select('*').single()
+
+  //await new Promise((res) => setTimeout(res, 1000))
 
   if (error) {
     console.error(error)

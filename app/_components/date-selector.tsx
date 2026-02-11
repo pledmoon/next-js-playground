@@ -1,28 +1,35 @@
-import { isWithinInterval } from "date-fns";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+'use client'
+
+import { isWithinInterval } from 'date-fns'
+import { DayPicker } from 'react-day-picker'
+import 'react-day-picker/style.css'
+import type { Cabin } from '@/app/_types/cabin-card.type'
+import type { Settings } from '@/app/_types/settings.type'
 
 function isAlreadyBooked(range, datesArr) {
   return (
     range.from &&
     range.to &&
-    datesArr.some((date) =>
-      isWithinInterval(date, { start: range.from, end: range.to })
-    )
-  );
+    datesArr.some((date) => isWithinInterval(date, { start: range.from, end: range.to }))
+  )
 }
 
-function DateSelector() {
-  // CHANGE
-  const regularPrice = 23;
-  const discount = 23;
-  const numNights = 23;
-  const cabinPrice = 23;
-  const range = { from: null, to: null };
+interface DateSelectorProps {
+  cabin: Cabin
+  bookedDates: any
+  settings: Settings
+}
 
+function DateSelector({ cabin, bookedDates, settings }: DateSelectorProps) {
   // SETTINGS
-  const minBookingLength = 1;
-  const maxBookingLength = 23;
+  const { min_booking_length: minBookingLength, max_booking_length: maxBookingLength } = settings
+
+  // CHANGE
+  const regularPrice = 23
+  const discount = 23
+  const numNights = 23
+  const cabinPrice = 23
+  const range = { from: null, to: null }
 
   return (
     <div className="flex flex-col justify-between">
@@ -31,11 +38,12 @@ function DateSelector() {
         mode="range"
         min={minBookingLength + 1}
         max={maxBookingLength}
-        fromMonth={new Date()}
-        fromDate={new Date()}
-        toYear={new Date().getFullYear() + 5}
         captionLayout="dropdown"
         numberOfMonths={2}
+        startMonth={new Date()}
+        endMonth={new Date(new Date().setMonth(new Date().getMonth() + 5))}
+        disabled={[{ before: new Date() }]}
+        showOutsideDays={true}
       />
 
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
@@ -44,9 +52,7 @@ function DateSelector() {
             {discount > 0 ? (
               <>
                 <span className="text-2xl">${regularPrice - discount}</span>
-                <span className="line-through font-semibold text-primary-700">
-                  ${regularPrice}
-                </span>
+                <span className="line-through font-semibold text-primary-700">${regularPrice}</span>
               </>
             ) : (
               <span className="text-2xl">${regularPrice}</span>
@@ -59,7 +65,7 @@ function DateSelector() {
                 <span>&times;</span> <span>{numNights}</span>
               </p>
               <p>
-                <span className="text-lg font-bold uppercase">Total</span>{" "}
+                <span className="text-lg font-bold uppercase">Total</span>{' '}
                 <span className="text-2xl font-semibold">${cabinPrice}</span>
               </p>
             </>
@@ -76,7 +82,7 @@ function DateSelector() {
         ) : null}
       </div>
     </div>
-  );
+  )
 }
 
-export default DateSelector;
+export default DateSelector

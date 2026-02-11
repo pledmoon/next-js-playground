@@ -55,9 +55,18 @@
 }
 
 /* For data picker */
-.rdp {
-  --rdp-cell-size: 32px !important;
+.rdp-root {
   --rdp-accent-color: var(--color-accent-500) !important;
   --rdp-background-color: var(--color-accent-600) !important;
+  --rdp-accent-background-color: var(--color-accent-600) !important;
+  --rdp-day-height: 34px !important;
+  --rdp-day-width: 34px !important;
+  --rdp-day_button-height: 34px !important;
+  --rdp-day_button-width: 34px !important;
+  --rdp-months-gap: 15px !important;
   margin: 0 !important;
+}
+
+.rdp-outside.rdp-selected {
+  opacity: 1;
 }
