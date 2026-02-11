@@ -1,18 +1,20 @@
 import { eachDayOfInterval } from 'date-fns'
 import { supabase } from '@/app/_lib/supabase'
 import { Cabin } from '@/app/_types/cabin-card.type'
+import { notFound } from 'next/navigation'
 
 /////////////
 // GET
 
-export async function getCabin(id): Promise<Cabin> {
+export async function getCabin(id: string): Promise<Cabin> {
   const { data, error } = await supabase.from('cabins').select('*').eq('id', id).single()
 
   // For testing
   // await new Promise((res) => setTimeout(res, 1000));
 
   if (error) {
-    console.error(error)
+    //console.error(error.message)
+    notFound()
   }
 
   return data
@@ -96,8 +98,8 @@ export async function getBookedDatesByCabinId(cabinId) {
   const { data, error } = await supabase
     .from('bookings')
     .select('*')
-    .eq('cabinId', cabinId)
-    .or(`startDate.gte.${today},status.eq.checked-in`)
+    .eq('cabin_id', cabinId)
+    .or(`start_date.gte.${today},status.eq.checked-in`)
 
   if (error) {
     console.error(error)
