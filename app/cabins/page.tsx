@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import Spinner from '@/app/_components/spinner'
 import { CabinList } from '@/app/_components/cabin-list'
 import { Filter } from '@/app/_components/filter'
+import ReservationReminder from '@/app/_components/reservation-reminder'
 
 // так как мы используетм searchParams, это будет проигнорено,
 // так как мы включили dynamic режим
@@ -51,6 +52,8 @@ export default async function CabinsPage({ searchParams }: CabinsPageProps) {
       >
         <CabinList filter={filter as 'all' | 'small' | 'medium' | 'large'} />
       </Suspense>
+
+      <ReservationReminder />
     </div>
   )
 }

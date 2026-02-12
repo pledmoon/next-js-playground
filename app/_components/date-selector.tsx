@@ -5,6 +5,7 @@ import { DayPicker } from 'react-day-picker'
 import 'react-day-picker/style.css'
 import type { Cabin } from '@/app/_types/cabin-card.type'
 import type { Settings } from '@/app/_types/settings.type'
+import { useReservation } from '@/app/_components/reservation-context'
 
 function isAlreadyBooked(range, datesArr) {
   return (
@@ -21,6 +22,8 @@ interface DateSelectorProps {
 }
 
 function DateSelector({ cabin, bookedDates, settings }: DateSelectorProps) {
+  const { range, setRange, resetRange } = useReservation()
+
   // SETTINGS
   const { min_booking_length: minBookingLength, max_booking_length: maxBookingLength } = settings
 
@@ -29,7 +32,6 @@ function DateSelector({ cabin, bookedDates, settings }: DateSelectorProps) {
   const discount = 23
   const numNights = 23
   const cabinPrice = 23
-  const range = { from: null, to: null }
 
   return (
     <div className="flex flex-col justify-between">
@@ -44,6 +46,8 @@ function DateSelector({ cabin, bookedDates, settings }: DateSelectorProps) {
         endMonth={new Date(new Date().setMonth(new Date().getMonth() + 5))}
         disabled={[{ before: new Date() }]}
         showOutsideDays={true}
+        selected={range}
+        onSelect={setRange}
       />
 
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
@@ -72,10 +76,10 @@ function DateSelector({ cabin, bookedDates, settings }: DateSelectorProps) {
           ) : null}
         </div>
 
-        {range.from || range.to ? (
+        {range?.from || range?.to ? (
           <button
             className="border border-primary-800 py-2 px-4 text-sm font-semibold"
-            onClick={() => resetRange()}
+            onClick={resetRange}
           >
             Clear
           </button>

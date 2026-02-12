@@ -1,10 +1,14 @@
+'use client'
+
 import type { Cabin } from '@/app/_types/cabin-card.type'
+import { useReservation } from '@/app/_components/reservation-context'
 
 interface ReservationFormProps {
   cabin: Cabin
 }
 
 function ReservationForm({ cabin }: ReservationFormProps) {
+  const { selectedDatesRange } = useReservation()
   const { max_capacity: maxCapacity } = cabin
 
   return (
@@ -59,6 +63,13 @@ function ReservationForm({ cabin }: ReservationFormProps) {
             placeholder="Any pets, allergies, special requirements, etc.?"
           />
         </div>
+
+        {(selectedDatesRange?.from || selectedDatesRange?.to) && (
+          <small className="block text-sm text-accent-400">
+            {selectedDatesRange.from?.toLocaleDateString()}—
+            {selectedDatesRange.to?.toLocaleDateString()}
+          </small>
+        )}
 
         <div className="flex justify-end items-center gap-6">
           <p className="text-primary-300 text-base">Start by selecting dates</p>
