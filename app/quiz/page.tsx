@@ -1,6 +1,7 @@
 import { Header } from '@/app/quiz/header'
 import DateCounter from '@/app/quiz/date-counter'
 import { Main } from '@/app/quiz/main'
+import { BankAccount } from '@/app/quiz/bank-account'
 
 export default function QuizPage() {
   return (
@@ -13,6 +14,8 @@ export default function QuizPage() {
       </Main>
 
       <DateCounter />
+
+      <BankAccount />
     </div>
   )
 }
