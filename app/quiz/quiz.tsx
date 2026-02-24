@@ -2,6 +2,9 @@
 
 import { Main } from '@/app/quiz/main'
 import { useEffect, useReducer } from 'react'
+import Loader from '@/app/quiz/loader'
+import ErrorFetching from '@/app/quiz/error-fetching'
+import { StartScreen } from '@/app/quiz/start-screen'
 
 interface QuizState {
   questions: Question[]
@@ -37,6 +40,8 @@ function reducer(state: QuizState, action: Action): QuizState {
 export const Quiz = () => {
   const [{ questions, status }, dispatch] = useReducer(reducer, initialState)
 
+  const numQuestions = questions.length
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -58,8 +63,11 @@ export const Quiz = () => {
 
   return (
     <Main>
-      <p>1/{questions.length}</p>
-      <p>Question?</p>
+      {status === 'loading' && <Loader />}
+
+      {status === 'error' && <ErrorFetching />}
+
+      {status === 'ready' && <StartScreen numQuestions={numQuestions} />}
     </Main>
   )
 }
