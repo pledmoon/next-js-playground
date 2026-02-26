@@ -10,6 +10,8 @@ export default function QuizPage() {
 
       <Quiz />
 
+      <hr className="mt-24 border-b border-accent-400 w-full" />
+
       <DateCounter />
 
       <BankAccount />
