@@ -10,6 +10,7 @@ import { Question } from '@/app/quiz/question'
 interface QuizState {
   questions: Question[]
   status: 'loading' | 'error' | 'ready' | 'active' | 'finished'
+  index: number
 }
 
 type Question = {
@@ -28,6 +29,7 @@ type Action =
 const initialState: QuizState = {
   questions: [],
   status: 'loading',
+  index: 0,
 }
 
 function reducer(state: QuizState, action: Action): QuizState {
@@ -44,7 +46,7 @@ function reducer(state: QuizState, action: Action): QuizState {
 }
 
 export const Quiz = () => {
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState)
+  const [{ questions, status, index }, dispatch] = useReducer(reducer, initialState)
 
   const numQuestions = questions.length
 
@@ -80,7 +82,7 @@ export const Quiz = () => {
         />
       )}
 
-      {status === 'active' && <Question />}
+      {status === 'active' && <Question question={questions[index]} />}
     </Main>
   )
 }
