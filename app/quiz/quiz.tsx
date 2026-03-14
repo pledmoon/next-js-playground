@@ -6,11 +6,14 @@ import Loader from '@/app/quiz/loader'
 import ErrorFetching from '@/app/quiz/error-fetching'
 import { StartScreen } from '@/app/quiz/start-screen'
 import { Question } from '@/app/quiz/question'
+import { NextButton } from '@/app/quiz/next-button'
 
 interface QuizState {
   questions: Question[]
   status: 'loading' | 'error' | 'ready' | 'active' | 'finished'
   index: number
+  answer: number | null
+  points: number
 }
 
 type Question = {
@@ -21,18 +24,22 @@ type Question = {
   points: number
 }
 
-type Action =
+type QuizAction =
   | { type: 'dataReceived'; payload: Question[] }
   | { type: 'dataFailed' }
   | { type: 'start' }
+  | { type: 'newAnswer'; payload: number }
+  | { type: 'nextQuestion' }
 
 const initialState: QuizState = {
   questions: [],
   status: 'loading',
   index: 0,
+  answer: null,
+  points: 0,
 }
 
-function reducer(state: QuizState, action: Action): QuizState {
+function reducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
     case 'dataReceived':
       return { ...state, questions: action.payload, status: 'ready' }
@@ -40,13 +47,26 @@ function reducer(state: QuizState, action: Action): QuizState {
       return { ...state, status: 'error' }
     case 'start':
       return { ...state, status: 'active' }
+    case 'newAnswer':
+      const question = state.questions.at(state.index)
+
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question?.correctOption
+            ? state.points + question.points
+            : state.points,
+      }
+    case 'nextQuestion':
+      return { ...state, index: state.index + 1, answer: null }
     default:
       throw new Error('Action is not defined')
   }
 }
 
 export const Quiz = () => {
-  const [{ questions, status, index }, dispatch] = useReducer(reducer, initialState)
+  const [{ questions, status, index, answer }, dispatch] = useReducer(reducer, initialState)
 
   const numQuestions = questions.length
 
@@ -82,7 +102,22 @@ export const Quiz = () => {
         />
       )}
 
-      {status === 'active' && <Question question={questions[index]} />}
+      {status === 'active' && (
+        <>
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+
+          <NextButton
+            dispatch={dispatch}
+            answer={answer}
+          >
+            Next
+          </NextButton>
+        </>
+      )}
     </Main>
   )
 }
