@@ -16,6 +16,7 @@ type QuizAction =
   | { type: 'nextQuestion' }
   | { type: 'finish' }
   | { type: 'restart' }
+  | { type: 'tick' }
 
 interface NextButtonProps {
   dispatch: Dispatch<QuizAction>

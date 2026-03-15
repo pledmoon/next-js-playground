@@ -9,6 +9,10 @@ import { Question } from '@/app/quiz/question'
 import { NextButton } from '@/app/quiz/next-button'
 import { Progress } from '@/app/quiz/progress'
 import { FinishScreen } from '@/app/quiz/finish-screen'
+import { Footer } from '@/app/quiz/footer'
+import { Timer } from '@/app/quiz/timer'
+
+const SECS_PER_QUESTION = 30
 
 interface QuizState {
   questions: Question[]
@@ -17,6 +21,7 @@ interface QuizState {
   answer: number | null
   points: number
   highscore: number
+  secondsRemaining: number | null
 }
 
 type Question = {
@@ -35,6 +40,7 @@ type QuizAction =
   | { type: 'nextQuestion' }
   | { type: 'finish' }
   | { type: 'restart' }
+  | { type: 'tick' }
 
 const initialState: QuizState = {
   questions: [],
@@ -43,6 +49,7 @@ const initialState: QuizState = {
   answer: null,
   points: 0,
   highscore: 0,
+  secondsRemaining: null, // calculate from a number of questions
 }
 
 function reducer(state: QuizState, action: QuizAction): QuizState {
@@ -52,7 +59,11 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
     case 'dataFailed':
       return { ...state, status: 'error' }
     case 'start':
-      return { ...state, status: 'active' }
+      return {
+        ...state,
+        status: 'active',
+        secondsRemaining: state.questions.length * SECS_PER_QUESTION,
+      }
     case 'newAnswer':
       const question = state.questions.at(state.index)
 
@@ -74,16 +85,20 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
       }
     case 'restart':
       return { ...initialState, questions: state.questions, status: 'ready' }
+    case 'tick':
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining && state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? 'finished' : state.status,
+      }
     default:
       throw new Error('Action is not defined')
   }
 }
 
 export const Quiz = () => {
-  const [{ questions, status, index, answer, points, highscore }, dispatch] = useReducer(
-    reducer,
-    initialState,
-  )
+  const [{ questions, status, index, answer, points, highscore, secondsRemaining }, dispatch] =
+    useReducer(reducer, initialState)
 
   const numQuestions = questions.length
   const maxPossiblePoints = questions.reduce((acc, question) => acc + question.points, 0)
@@ -136,12 +151,19 @@ export const Quiz = () => {
             answer={answer}
           />
 
-          <NextButton
-            dispatch={dispatch}
-            answer={answer}
-            numQuestions={numQuestions}
-            currentQuestionIndex={index}
-          />
+          <Footer>
+            <Timer
+              secondsRemaining={secondsRemaining}
+              dispatch={dispatch}
+            />
+
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              numQuestions={numQuestions}
+              currentQuestionIndex={index}
+            />
+          </Footer>
         </>
       )}
 

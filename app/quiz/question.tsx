@@ -14,6 +14,9 @@ type QuizAction =
   | { type: 'start' }
   | { type: 'newAnswer'; payload: number }
   | { type: 'nextQuestion' }
+  | { type: 'finish' }
+  | { type: 'restart' }
+  | { type: 'tick' }
 
 interface QuestionProps {
   question: Question
