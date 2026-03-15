@@ -15,6 +15,7 @@ type QuizAction =
   | { type: 'newAnswer'; payload: number }
   | { type: 'nextQuestion' }
   | { type: 'finish' }
+  | { type: 'restart' }
 
 interface NextButtonProps {
   dispatch: Dispatch<QuizAction>

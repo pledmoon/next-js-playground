@@ -34,6 +34,7 @@ type QuizAction =
   | { type: 'newAnswer'; payload: number }
   | { type: 'nextQuestion' }
   | { type: 'finish' }
+  | { type: 'restart' }
 
 const initialState: QuizState = {
   questions: [],
@@ -71,6 +72,8 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
         status: 'finished',
         highscore: state.points > state.highscore ? state.points : state.highscore,
       }
+    case 'restart':
+      return { ...initialState, questions: state.questions, status: 'ready' }
     default:
       throw new Error('Action is not defined')
   }
@@ -147,6 +150,7 @@ export const Quiz = () => {
           points={points}
           maxPossiblePoints={maxPossiblePoints}
           highscore={highscore}
+          dispatch={dispatch}
         />
       )}
     </Main>
