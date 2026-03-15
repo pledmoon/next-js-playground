@@ -43,7 +43,7 @@ interface QuestionItemProps {
 
 const Options = ({ question, dispatch, answer }: QuestionItemProps) => {
   const { options } = question
-  const hasAnswered = !!answer
+  const hasAnswered = answer !== null
 
   const handleClick = (index: number) => {
     dispatch({ type: 'newAnswer', payload: index })

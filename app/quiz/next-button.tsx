@@ -22,7 +22,7 @@ interface NextButtonProps {
 }
 
 export const NextButton = ({ dispatch, answer, children }: NextButtonProps) => {
-  if (!answer) return null
+  if (answer === null) return null
 
   return (
     <button

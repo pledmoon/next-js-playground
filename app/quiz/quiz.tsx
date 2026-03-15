@@ -7,6 +7,7 @@ import ErrorFetching from '@/app/quiz/error-fetching'
 import { StartScreen } from '@/app/quiz/start-screen'
 import { Question } from '@/app/quiz/question'
 import { NextButton } from '@/app/quiz/next-button'
+import { Progress } from '@/app/quiz/progress'
 
 interface QuizState {
   questions: Question[]
@@ -66,9 +67,10 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
 }
 
 export const Quiz = () => {
-  const [{ questions, status, index, answer }, dispatch] = useReducer(reducer, initialState)
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(reducer, initialState)
 
   const numQuestions = questions.length
+  const maxPossiblePoints = questions.reduce((acc, question) => acc + question.points, 0)
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -104,6 +106,14 @@ export const Quiz = () => {
 
       {status === 'active' && (
         <>
+          <Progress
+            currentQuestion={index}
+            points={points}
+            numQuestions={numQuestions}
+            maxPossiblePoints={maxPossiblePoints}
+            answer={answer}
+          />
+
           <Question
             question={questions[index]}
             dispatch={dispatch}
