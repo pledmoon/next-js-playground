@@ -8,6 +8,7 @@ import { StartScreen } from '@/app/quiz/start-screen'
 import { Question } from '@/app/quiz/question'
 import { NextButton } from '@/app/quiz/next-button'
 import { Progress } from '@/app/quiz/progress'
+import { FinishScreen } from '@/app/quiz/finish-screen'
 
 interface QuizState {
   questions: Question[]
@@ -15,6 +16,7 @@ interface QuizState {
   index: number
   answer: number | null
   points: number
+  highscore: number
 }
 
 type Question = {
@@ -31,6 +33,7 @@ type QuizAction =
   | { type: 'start' }
   | { type: 'newAnswer'; payload: number }
   | { type: 'nextQuestion' }
+  | { type: 'finish' }
 
 const initialState: QuizState = {
   questions: [],
@@ -38,6 +41,7 @@ const initialState: QuizState = {
   index: 0,
   answer: null,
   points: 0,
+  highscore: 0,
 }
 
 function reducer(state: QuizState, action: QuizAction): QuizState {
@@ -61,13 +65,22 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
       }
     case 'nextQuestion':
       return { ...state, index: state.index + 1, answer: null }
+    case 'finish':
+      return {
+        ...state,
+        status: 'finished',
+        highscore: state.points > state.highscore ? state.points : state.highscore,
+      }
     default:
       throw new Error('Action is not defined')
   }
 }
 
 export const Quiz = () => {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(reducer, initialState)
+  const [{ questions, status, index, answer, points, highscore }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  )
 
   const numQuestions = questions.length
   const maxPossiblePoints = questions.reduce((acc, question) => acc + question.points, 0)
@@ -107,7 +120,7 @@ export const Quiz = () => {
       {status === 'active' && (
         <>
           <Progress
-            currentQuestion={index}
+            currentQuestionIndex={index}
             points={points}
             numQuestions={numQuestions}
             maxPossiblePoints={maxPossiblePoints}
@@ -123,10 +136,18 @@ export const Quiz = () => {
           <NextButton
             dispatch={dispatch}
             answer={answer}
-          >
-            Next
-          </NextButton>
+            numQuestions={numQuestions}
+            currentQuestionIndex={index}
+          />
         </>
+      )}
+
+      {status === 'finished' && (
+        <FinishScreen
+          points={points}
+          maxPossiblePoints={maxPossiblePoints}
+          highscore={highscore}
+        />
       )}
     </Main>
   )

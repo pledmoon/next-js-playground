@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode } from 'react'
+import type { Dispatch } from 'react'
 
 type Question = {
   id: string
@@ -14,23 +14,44 @@ type QuizAction =
   | { type: 'start' }
   | { type: 'newAnswer'; payload: number }
   | { type: 'nextQuestion' }
+  | { type: 'finish' }
 
 interface NextButtonProps {
   dispatch: Dispatch<QuizAction>
   answer: number | null
-  children: Readonly<ReactNode>
+  numQuestions: number
+  currentQuestionIndex: number
 }
 
-export const NextButton = ({ dispatch, answer, children }: NextButtonProps) => {
+export const NextButton = ({
+  dispatch,
+  answer,
+  numQuestions,
+  currentQuestionIndex,
+}: NextButtonProps) => {
   if (answer === null) return null
 
-  return (
-    <button
-      className="btn btn-ui"
-      onClick={() => dispatch({ type: 'nextQuestion' })}
-      type="button"
-    >
-      {children}
-    </button>
-  )
+  if (currentQuestionIndex < numQuestions - 1) {
+    return (
+      <button
+        className="btn btn-ui"
+        onClick={() => dispatch({ type: 'nextQuestion' })}
+        type="button"
+      >
+        Next
+      </button>
+    )
+  }
+
+  if (currentQuestionIndex === numQuestions - 1) {
+    return (
+      <button
+        className="btn btn-ui"
+        onClick={() => dispatch({ type: 'finish' })}
+        type="button"
+      >
+        Finish
+      </button>
+    )
+  }
 }

@@ -1,5 +1,5 @@
 interface ProgressProps {
-  currentQuestion: number
+  currentQuestionIndex: number
   points: number
   numQuestions: number
   maxPossiblePoints: number
@@ -7,7 +7,7 @@ interface ProgressProps {
 }
 
 export const Progress = ({
-  currentQuestion,
+  currentQuestionIndex,
   points,
   numQuestions,
   maxPossiblePoints,
@@ -17,12 +17,12 @@ export const Progress = ({
     <header className="progress">
       <progress
         max={numQuestions}
-        //value={answer ? currentQuestion + 1 : currentQuestion}
-        value={currentQuestion + Number(answer !== null)}
+        //value={answer ? currentQuestionIndex + 1 : currentQuestionIndex}
+        value={currentQuestionIndex + Number(answer !== null)}
       />
 
       <p>
-        Question <strong>{currentQuestion + 1}</strong> / {numQuestions}
+        Question <strong>{currentQuestionIndex + 1}</strong> / {numQuestions}
       </p>
 
       <p>
