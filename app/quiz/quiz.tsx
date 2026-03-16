@@ -11,36 +11,9 @@ import { Progress } from '@/app/quiz/progress'
 import { FinishScreen } from '@/app/quiz/finish-screen'
 import { Footer } from '@/app/quiz/footer'
 import { Timer } from '@/app/quiz/timer'
+import type { QuizAction, QuizState } from '@/app/quiz/quiz.types'
 
 const SECS_PER_QUESTION = 30
-
-interface QuizState {
-  questions: Question[]
-  status: 'loading' | 'error' | 'ready' | 'active' | 'finished'
-  index: number
-  answer: number | null
-  points: number
-  highscore: number
-  secondsRemaining: number | null
-}
-
-type Question = {
-  id: string
-  question: string
-  options: string[]
-  correctOption: number
-  points: number
-}
-
-type QuizAction =
-  | { type: 'dataReceived'; payload: Question[] }
-  | { type: 'dataFailed' }
-  | { type: 'start' }
-  | { type: 'newAnswer'; payload: number }
-  | { type: 'nextQuestion' }
-  | { type: 'finish' }
-  | { type: 'restart' }
-  | { type: 'tick' }
 
 const initialState: QuizState = {
   questions: [],

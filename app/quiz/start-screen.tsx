@@ -1,21 +1,9 @@
-import { ActionDispatch } from 'react'
+import type { ActionDispatch } from 'react'
+import type { QuizAction } from '@/app/quiz/quiz.types'
 
 interface StartScreenProps {
   numQuestions: number
-  dispatch: ActionDispatch<[action: Action]>
-}
-
-type Action =
-  | { type: 'dataReceived'; payload: Question[] }
-  | { type: 'dataFailed' }
-  | { type: 'start' }
-
-type Question = {
-  id: string
-  question: string
-  options: string[]
-  correctOption: number
-  points: number
+  dispatch: ActionDispatch<[action: QuizAction]>
 }
 
 export const StartScreen = ({ numQuestions, dispatch }: StartScreenProps) => {

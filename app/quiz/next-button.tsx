@@ -1,22 +1,5 @@
 import type { Dispatch } from 'react'
-
-type Question = {
-  id: string
-  question: string
-  options: string[]
-  correctOption: number
-  points: number
-}
-
-type QuizAction =
-  | { type: 'dataReceived'; payload: Question[] }
-  | { type: 'dataFailed' }
-  | { type: 'start' }
-  | { type: 'newAnswer'; payload: number }
-  | { type: 'nextQuestion' }
-  | { type: 'finish' }
-  | { type: 'restart' }
-  | { type: 'tick' }
+import type { QuizAction } from '@/app/quiz/quiz.types'
 
 interface NextButtonProps {
   dispatch: Dispatch<QuizAction>

@@ -1,25 +1,8 @@
 import type { Dispatch } from 'react'
-
-type Question = {
-  id: string
-  question: string
-  options: string[]
-  correctOption: number
-  points: number
-}
-
-type QuizAction =
-  | { type: 'dataReceived'; payload: Question[] }
-  | { type: 'dataFailed' }
-  | { type: 'start' }
-  | { type: 'newAnswer'; payload: number }
-  | { type: 'nextQuestion' }
-  | { type: 'finish' }
-  | { type: 'restart' }
-  | { type: 'tick' }
+import type { Question as QuestionType, QuizAction } from '@/app/quiz/quiz.types'
 
 interface QuestionProps {
-  question: Question
+  question: QuestionType
   answer: number | null
   dispatch: Dispatch<QuizAction>
 }
@@ -38,13 +21,13 @@ export const Question = ({ question, dispatch, answer }: QuestionProps) => {
   )
 }
 
-interface QuestionItemProps {
-  question: Question
+interface OptionsProps {
+  question: QuestionType
   answer: number | null
   dispatch: Dispatch<QuizAction>
 }
 
-const Options = ({ question, dispatch, answer }: QuestionItemProps) => {
+const Options = ({ question, dispatch, answer }: OptionsProps) => {
   const { options } = question
   const hasAnswered = answer !== null
 
