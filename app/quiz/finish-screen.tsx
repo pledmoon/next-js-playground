@@ -1,10 +1,8 @@
 import { useQuiz } from '@/app/quiz/quiz-context'
 
 export const FinishScreen = () => {
-  const { state, dispatch } = useQuiz()
-  const { questions, points, highscore } = state
+  const { points, highscore, maxPossiblePoints, dispatch } = useQuiz()
 
-  const maxPossiblePoints = questions.reduce((acc, question) => acc + question.points, 0)
   const percentage = (points / maxPossiblePoints) * 100
 
   let emoji

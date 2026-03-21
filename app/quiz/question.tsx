@@ -1,8 +1,8 @@
+import type { Question as QuestionType } from '@/app/quiz/quiz.types'
 import { useQuiz } from '@/app/quiz/quiz-context'
 
 export const Question = () => {
-  const { state } = useQuiz()
-  const { questions, index } = state
+  const { questions, index } = useQuiz()
 
   const question = questions[index]
 
@@ -10,16 +10,18 @@ export const Question = () => {
     <div className="question">
       <h4>{question.question}</h4>
 
-      <Options />
+      <Options question={question} />
     </div>
   )
 }
 
-const Options = () => {
-  const { state, dispatch } = useQuiz()
-  const { questions, index, answer } = state
+interface OptionsProps {
+  question: QuestionType
+}
 
-  const question = questions[index]
+const Options = ({ question }: OptionsProps) => {
+  const { answer, dispatch } = useQuiz()
+
   const { options } = question
 
   const hasAnswered = answer !== null

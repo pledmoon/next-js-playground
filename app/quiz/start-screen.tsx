@@ -1,10 +1,7 @@
 import { useQuiz } from '@/app/quiz/quiz-context'
 
 export const StartScreen = () => {
-  const { state, dispatch } = useQuiz()
-  const { questions } = state
-
-  const numQuestions = questions.length
+  const { numQuestions, dispatch } = useQuiz()
 
   return (
     <div className="start">

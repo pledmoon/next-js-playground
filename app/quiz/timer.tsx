@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import { useQuiz } from '@/app/quiz/quiz-context'
 
 export const Timer = () => {
-  const { state, dispatch } = useQuiz()
-  const { secondsRemaining } = state
+  const { secondsRemaining, dispatch } = useQuiz()
 
   useEffect(() => {
     const timerId = setInterval(() => {

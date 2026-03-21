@@ -8,7 +8,7 @@ import {
   useEffect,
   useReducer,
 } from 'react'
-import { type QuizAction, type QuizState } from '@/app/quiz/quiz.types'
+import { Question, type QuizAction, type QuizState } from '@/app/quiz/quiz.types'
 
 const SECS_PER_QUESTION = 30
 
@@ -17,7 +17,15 @@ interface QuizContextProps {
 }
 
 const QuizContext = createContext<{
-  state: QuizState
+  questions: Question[]
+  status: 'loading' | 'error' | 'ready' | 'active' | 'finished'
+  index: number
+  answer: number | null
+  points: number
+  highscore: number
+  secondsRemaining: number | null
+  numQuestions: number
+  maxPossiblePoints: number
   dispatch: ActionDispatch<[action: QuizAction]>
 } | null>(null)
 
@@ -76,7 +84,11 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
 }
 
 export const QuizProvider = ({ children }: QuizContextProps) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [{ questions, status, index, answer, points, highscore, secondsRemaining }, dispatch] =
+    useReducer(reducer, initialState)
+
+  const numQuestions = questions.length
+  const maxPossiblePoints = questions.reduce((acc, question) => acc + question.points, 0)
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -97,7 +109,24 @@ export const QuizProvider = ({ children }: QuizContextProps) => {
     fetchQuestions()
   }, [])
 
-  return <QuizContext value={{ state, dispatch }}>{children}</QuizContext>
+  return (
+    <QuizContext
+      value={{
+        questions,
+        status,
+        index,
+        answer,
+        points,
+        highscore,
+        secondsRemaining,
+        numQuestions,
+        maxPossiblePoints,
+        dispatch,
+      }}
+    >
+      {children}
+    </QuizContext>
+  )
 }
 
 export const useQuiz = () => {

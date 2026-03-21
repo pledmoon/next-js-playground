@@ -13,8 +13,7 @@ import { Timer } from '@/app/quiz/timer'
 import { useQuiz } from '@/app/quiz/quiz-context'
 
 export const Quiz = () => {
-  const { state, dispatch } = useQuiz()
-  const { status } = state
+  const { status } = useQuiz()
 
   return (
     <Main>

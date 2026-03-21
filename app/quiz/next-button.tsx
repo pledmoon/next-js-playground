@@ -1,10 +1,7 @@
 import { useQuiz } from '@/app/quiz/quiz-context'
 
 export const NextButton = () => {
-  const { state, dispatch } = useQuiz()
-  const { questions, index: currentQuestionIndex, answer } = state
-
-  const numQuestions = questions.length
+  const { index: currentQuestionIndex, answer, numQuestions, dispatch } = useQuiz()
 
   if (answer === null) return null
 

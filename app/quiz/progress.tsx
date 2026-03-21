@@ -1,11 +1,7 @@
 import { useQuiz } from '@/app/quiz/quiz-context'
 
 export const Progress = () => {
-  const { state } = useQuiz()
-  const { index: currentQuestionIndex, points, questions, answer } = state
-
-  const numQuestions = questions.length
-  const maxPossiblePoints = questions.reduce((acc, question) => acc + question.points, 0)
+  const { index: currentQuestionIndex, points, numQuestions, maxPossiblePoints, answer } = useQuiz()
 
   return (
     <header className="progress">
