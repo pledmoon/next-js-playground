@@ -1,34 +1,27 @@
-import type { Dispatch } from 'react'
-import type { Question as QuestionType, QuizAction } from '@/app/quiz/quiz.types'
+import { useQuiz } from '@/app/quiz/quiz-context'
 
-interface QuestionProps {
-  question: QuestionType
-  answer: number | null
-  dispatch: Dispatch<QuizAction>
-}
+export const Question = () => {
+  const { state } = useQuiz()
+  const { questions, index } = state
 
-export const Question = ({ question, dispatch, answer }: QuestionProps) => {
+  const question = questions[index]
+
   return (
     <div className="question">
       <h4>{question.question}</h4>
 
-      <Options
-        question={question}
-        dispatch={dispatch}
-        answer={answer}
-      />
+      <Options />
     </div>
   )
 }
 
-interface OptionsProps {
-  question: QuestionType
-  answer: number | null
-  dispatch: Dispatch<QuizAction>
-}
+const Options = () => {
+  const { state, dispatch } = useQuiz()
+  const { questions, index, answer } = state
 
-const Options = ({ question, dispatch, answer }: OptionsProps) => {
+  const question = questions[index]
   const { options } = question
+
   const hasAnswered = answer !== null
 
   const handleClick = (index: number) => {

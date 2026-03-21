@@ -1,18 +1,12 @@
-interface ProgressProps {
-  currentQuestionIndex: number
-  points: number
-  numQuestions: number
-  maxPossiblePoints: number
-  answer: number | null
-}
+import { useQuiz } from '@/app/quiz/quiz-context'
 
-export const Progress = ({
-  currentQuestionIndex,
-  points,
-  numQuestions,
-  maxPossiblePoints,
-  answer,
-}: ProgressProps) => {
+export const Progress = () => {
+  const { state } = useQuiz()
+  const { index: currentQuestionIndex, points, questions, answer } = state
+
+  const numQuestions = questions.length
+  const maxPossiblePoints = questions.reduce((acc, question) => acc + question.points, 0)
+
   return (
     <header className="progress">
       <progress
