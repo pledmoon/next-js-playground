@@ -1,3 +1,5 @@
+import { ReduxBank } from '@/app/redux/redux-bank'
+
 export default function ReduxPage() {
-  return <h1>PAGE</h1>
+  return <ReduxBank />
 }
