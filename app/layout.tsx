@@ -4,6 +4,7 @@ import '@/app/_styles/globals.css'
 import { type ReactNode } from 'react'
 import { Josefin_Sans } from 'next/font/google'
 import { ReservationProvider } from '@/app/_components/reservation-context'
+import { ProviderRedux } from '@/app/_components/provider-redux/provider-redux'
 
 const josefin = Josefin_Sans({
   subsets: ['latin'],
@@ -31,13 +32,15 @@ export default function RootLayout({
       <body
         className={`${josefin.className} min-h-screen bg-primary-950 text-primary-100 flex-col flex antialiased`}
       >
-        <Header />
+        <ProviderRedux>
+          <Header />
 
-        <main className="flex-1 px-8 py-12 grid">
-          <div className="max-w-7xl mx-auto w-full">
-            <ReservationProvider>{children}</ReservationProvider>
-          </div>
-        </main>
+          <main className="flex-1 px-8 py-12 grid">
+            <div className="max-w-7xl mx-auto w-full">
+              <ReservationProvider>{children}</ReservationProvider>
+            </div>
+          </main>
+        </ProviderRedux>
       </body>
     </html>
   )

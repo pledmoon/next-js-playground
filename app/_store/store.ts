@@ -7,15 +7,18 @@ const rootReducer = combineReducers({
   customer: customerReducer,
 })
 
-export const store = createStore(rootReducer)
+export const makeStore = () => {
+  const _store = createStore(rootReducer)
 
-/**
- * Автоматический вывод типов
- */
-// 1. RootState — это тип всего состояния приложения.
-// TypeScript сам посмотрит на rootReducer и поймет, что там есть account и customer
-export type RootState = ReturnType<typeof store.getState>
+  if (typeof window !== 'undefined') {
+    store = _store
+  }
 
-// 2. AppDispatch — это тип функции dispatch.
-// Он будет знать обо всех экшенах, которые принимают ваши редюсеры.
-export type AppDispatch = typeof store.dispatch
+  return _store
+}
+
+export type AppStore = ReturnType<typeof makeStore>
+export type RootState = ReturnType<AppStore['getState']>
+export type AppDispatch = AppStore['dispatch']
+
+export let store: AppStore
