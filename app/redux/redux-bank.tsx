@@ -1,11 +1,12 @@
 'use client'
 
-import { store } from '@/app/_store/store'
+import { Customer } from '@/app/features/customers/customer'
 
 export const ReduxBank = () => {
-  // нужен react-redux, таким образом нельзя использовать, потому что теряется реактивность
-  store.dispatch({ type: 'account/deposit', payload: 100 })
-  console.log(store.getState())
-
-  return <h1>BANKE</h1>
+  return (
+    <>
+      <h1>BANKE</h1>
+      <Customer />
+    </>
+  )
 }

@@ -1,6 +1,7 @@
 import { combineReducers, createStore } from 'redux'
-import { accountReducer } from '@/app/features/accounts/accountSlice'
-import { customerReducer } from '@/app/features/customers/customerSlice'
+import { accountReducer } from '@/app/features/accounts/account-slice'
+import { customerReducer } from '@/app/features/customers/customer-slice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const rootReducer = combineReducers({
   account: accountReducer,
@@ -22,3 +23,6 @@ export type RootState = ReturnType<AppStore['getState']>
 export type AppDispatch = AppStore['dispatch']
 
 export let store: AppStore
+
+export const useAppSelector = useSelector.withTypes<RootState>()
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
