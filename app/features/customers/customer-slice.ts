@@ -4,7 +4,7 @@
 // initial state
 type CustomerState = {
   fullName: string
-  nationalID: string
+  nationalId: string
   createdAt: string
 }
 
@@ -26,7 +26,7 @@ type CustomerAction = CreateCustomerAction | UpdateNameAction
  */
 const initialStateCustomer = {
   fullName: '',
-  nationalID: '',
+  nationalId: '',
   createdAt: '',
 }
 
@@ -57,12 +57,12 @@ export const customerReducer = (
  * для каждого action, создаем свой action creator
  * возвращает action, а action это объект
  */
-export function createCustomer(fullName: string, nationalID: string): CreateCustomerAction {
+export function createCustomer(fullName: string, nationalId: string): CreateCustomerAction {
   return {
     type: 'customer/createCustomer',
     payload: {
       fullName,
-      nationalID,
+      nationalId,
       createdAt: new Date().toISOString(),
     },
   }

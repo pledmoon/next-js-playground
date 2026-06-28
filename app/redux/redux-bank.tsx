@@ -4,17 +4,24 @@ import AccountOperations from '@/app/features/accounts/account-operations'
 import BalanceDisplay from '@/app/features/accounts/balance-display'
 import CreateCustomer from '@/app/features/customers/create-customer'
 import Customer from '@/app/features/customers/customer'
+import { useAppSelector } from '@/app/_store/store'
 
 export const ReduxBank = () => {
+  const { fullName } = useAppSelector((state) => state.customer)
+
   return (
     <div className="relative">
       <h1>🏦 The React-Redux Bank ⚛️</h1>
 
-      <CreateCustomer />
-      <Customer />
+      {!fullName && <CreateCustomer />}
 
-      <AccountOperations />
-      <BalanceDisplay />
+      {fullName && (
+        <>
+          <Customer />
+          <AccountOperations />
+          <BalanceDisplay />
+        </>
+      )}
 
       <style
         dangerouslySetInnerHTML={{

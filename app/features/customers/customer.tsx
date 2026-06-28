@@ -1,5 +1,9 @@
+import { useAppSelector } from '@/app/_store/store'
+
 function Customer() {
-  return <h2>👋 Welcome, %NAME%</h2>
+  const { fullName } = useAppSelector((state) => state.customer)
+
+  return <h2>👋 Welcome, {fullName}</h2>
 }
 
 export default Customer
