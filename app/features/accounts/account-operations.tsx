@@ -1,19 +1,51 @@
-import { useState } from "react";
+import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '@/app/_store/store'
+import { deposit, payLoan, requestLoan, withdraw } from '@/app/features/accounts/account-slice'
 
 function AccountOperations() {
-  const [depositAmount, setDepositAmount] = useState("");
-  const [withdrawalAmount, setWithdrawalAmount] = useState("");
-  const [loanAmount, setLoanAmount] = useState("");
-  const [loanPurpose, setLoanPurpose] = useState("");
-  const [currency, setCurrency] = useState("USD");
+  const [depositAmount, setDepositAmount] = useState<string>('')
+  const [withdrawalAmount, setWithdrawalAmount] = useState<string>('')
+  const [loanAmount, setLoanAmount] = useState<string>('')
+  const [loanPurpose, setLoanPurpose] = useState<string>('')
+  const [currency, setCurrency] = useState<string>('USD')
 
-  function handleDeposit() {}
+  const dispatch = useAppDispatch()
+  const {
+    balance,
+    loan: currentLoan,
+    loanPurpose: currentLoanPurpose,
+  } = useAppSelector((state) => state.account)
 
-  function handleWithdrawal() {}
+  const account = useAppSelector((state) => state.account)
+  console.log(account)
 
-  function handleRequestLoan() {}
+  function handleDeposit() {
+    if (!depositAmount && +depositAmount) return
 
-  function handlePayLoan() {}
+    dispatch(deposit(+depositAmount))
+    setDepositAmount('')
+  }
+
+  function handleWithdrawal() {
+    if (!withdrawalAmount && +withdrawalAmount) return
+
+    if (+withdrawalAmount > balance) return
+
+    dispatch(withdraw(+withdrawalAmount))
+    setWithdrawalAmount('')
+  }
+
+  function handleRequestLoan() {
+    if (!loanAmount || !loanPurpose) return
+
+    dispatch(requestLoan(+loanAmount, loanPurpose))
+    setLoanAmount('')
+    setLoanPurpose('')
+  }
+
+  function handlePayLoan() {
+    dispatch(payLoan())
+  }
 
   return (
     <div>
@@ -24,7 +56,7 @@ function AccountOperations() {
           <input
             type="number"
             value={depositAmount}
-            onChange={(e) => setDepositAmount(+e.target.value)}
+            onChange={(e) => setDepositAmount(e.target.value)}
           />
           <select
             value={currency}
@@ -43,11 +75,9 @@ function AccountOperations() {
           <input
             type="number"
             value={withdrawalAmount}
-            onChange={(e) => setWithdrawalAmount(+e.target.value)}
+            onChange={(e) => setWithdrawalAmount(e.target.value)}
           />
-          <button onClick={handleWithdrawal}>
-            Withdraw {withdrawalAmount}
-          </button>
+          <button onClick={handleWithdrawal}>Withdraw {withdrawalAmount}</button>
         </div>
 
         <div>
@@ -55,7 +85,7 @@ function AccountOperations() {
           <input
             type="number"
             value={loanAmount}
-            onChange={(e) => setLoanAmount(+e.target.value)}
+            onChange={(e) => setLoanAmount(e.target.value)}
             placeholder="Loan amount"
           />
           <input
@@ -66,13 +96,17 @@ function AccountOperations() {
           <button onClick={handleRequestLoan}>Request loan</button>
         </div>
 
-        <div>
-          <span>Pay back $X</span>
-          <button onClick={handlePayLoan}>Pay loan</button>
-        </div>
+        {currentLoan > 0 && (
+          <div>
+            <span>
+              Pay back ${currentLoan} {currentLoanPurpose && `(${currentLoanPurpose})`}
+            </span>
+            <button onClick={handlePayLoan}>Pay loan</button>
+          </div>
+        )}
       </div>
     </div>
-  );
+  )
 }
 
-export default AccountOperations;
+export default AccountOperations

@@ -1,15 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@/app/_store/store'
+import { useAppDispatch } from '@/app/_store/store'
 import { createCustomer } from '@/app/features/customers/customer-slice'
 //import { state } from '@/app/_store/store'
 
 function Customer() {
   const dispatch = useAppDispatch()
-  const customer = useAppSelector((state) => state.customer)
-
-  console.log(customer)
+  //const customer = useAppSelector((state) => state.customer)
 
   const [fullName, setFullName] = useState('')
   const [nationalId, setNationalId] = useState('')
