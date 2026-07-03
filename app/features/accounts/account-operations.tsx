@@ -1,29 +1,37 @@
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/_store/store'
-import { deposit, payLoan, requestLoan, withdraw } from '@/app/features/accounts/account-slice'
+import {
+  type Currency,
+  deposit,
+  payLoan,
+  requestLoan,
+  withdraw,
+} from '@/app/features/accounts/account-slice'
 
 function AccountOperations() {
   const [depositAmount, setDepositAmount] = useState<string>('')
   const [withdrawalAmount, setWithdrawalAmount] = useState<string>('')
   const [loanAmount, setLoanAmount] = useState<string>('')
   const [loanPurpose, setLoanPurpose] = useState<string>('')
-  const [currency, setCurrency] = useState<string>('USD')
+  const [currency, setCurrency] = useState<Currency>('USD')
 
   const dispatch = useAppDispatch()
   const {
     balance,
     loan: currentLoan,
     loanPurpose: currentLoanPurpose,
+    isLoading,
   } = useAppSelector((state) => state.account)
 
   const account = useAppSelector((state) => state.account)
   console.log(account)
 
   function handleDeposit() {
-    if (!depositAmount && +depositAmount) return
+    if (!depositAmount) return
 
-    dispatch(deposit(+depositAmount))
+    dispatch(deposit(+depositAmount, currency))
     setDepositAmount('')
+    setCurrency('USD')
   }
 
   function handleWithdrawal() {
@@ -60,14 +68,19 @@ function AccountOperations() {
           />
           <select
             value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
+            onChange={(e) => setCurrency(e.target.value as Currency)}
           >
             <option value="USD">US Dollar</option>
             <option value="EUR">Euro</option>
             <option value="GBP">British Pound</option>
           </select>
 
-          <button onClick={handleDeposit}>Deposit {depositAmount}</button>
+          <button
+            onClick={handleDeposit}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Converting' : `Deposit ${depositAmount}`}
+          </button>
         </div>
 
         <div>

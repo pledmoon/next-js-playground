@@ -1,3 +1,5 @@
+import { type AppDispatch } from '@/app/_store/store'
+
 /**
  * Types
  */
@@ -6,7 +8,10 @@ type AccountState = {
   balance: number
   loan: number
   loanPurpose: string
+  isLoading: boolean
 }
+
+export type Currency = 'USD' | 'EUR' | 'GBP'
 
 // set of actions
 type DepositAction = {
@@ -31,7 +36,16 @@ type PayLoanAction = {
   type: 'account/payLoan'
 }
 
-type AccountAction = DepositAction | WithdrawAction | RequestLoanAction | PayLoanAction
+type ConvertingCurrencyAction = {
+  type: 'account/convertingCurrency'
+}
+
+type AccountAction =
+  | DepositAction
+  | WithdrawAction
+  | RequestLoanAction
+  | PayLoanAction
+  | ConvertingCurrencyAction
 
 /**
  * Initial State
@@ -40,6 +54,7 @@ const initialStateAccount = {
   balance: 0,
   loan: 0,
   loanPurpose: '',
+  isLoading: false,
 }
 
 /**
@@ -53,7 +68,7 @@ export const accountReducer = (
 ) => {
   switch (action.type) {
     case 'account/deposit':
-      return { ...state, balance: state.balance + action.payload }
+      return { ...state, balance: state.balance + action.payload, isLoading: false }
 
     case 'account/withdraw':
       return { ...state, balance: state.balance - action.payload }
@@ -70,6 +85,9 @@ export const accountReducer = (
     case 'account/payLoan':
       return { ...state, loan: 0, loanPurpose: '', balance: state.balance - state.loan }
 
+    case 'account/convertingCurrency':
+      return { ...state, isLoading: true }
+
     default:
       return state
   }
@@ -81,8 +99,24 @@ export const accountReducer = (
  * для каждого action, создаем свой action creator
  * возвращает action, а action это объект
  */
-export function deposit(amount: number): DepositAction {
-  return { type: 'account/deposit', payload: amount }
+export function deposit(amount: number, currency: Currency) {
+  if (currency === 'USD') {
+    return { type: 'account/deposit', payload: amount }
+  }
+
+  // thunk middleware
+  return async (dispatch: AppDispatch) => {
+    dispatch({ type: 'account/convertingCurrency' })
+
+    // API call
+    const converted = await convert(currency, 'USD', amount)
+
+    // delay to check whether isLoading state working
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    // return action
+    dispatch({ type: 'account/deposit', payload: converted })
+  }
 }
 
 export function withdraw(amount: number): WithdrawAction {
@@ -120,3 +154,12 @@ const actions = {
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>
 */
+
+async function convert(base: Currency, quote: Currency, amount: number) {
+  const api = 'https://api.frankfurter.dev'
+
+  const r = await fetch(`${api}/v2/rate/${base}/${quote}`)
+  const d = await r.json()
+
+  return (amount * d.rate).toFixed(2)
+}

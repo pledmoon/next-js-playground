@@ -1,4 +1,5 @@
-import { combineReducers, createStore } from 'redux'
+import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux'
+import { thunk } from 'redux-thunk'
 import { accountReducer } from '@/app/features/accounts/account-slice'
 import { customerReducer } from '@/app/features/customers/customer-slice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +10,7 @@ const rootReducer = combineReducers({
 })
 
 export const makeStore = () => {
-  const _store = createStore(rootReducer)
+  const _store = createStore(rootReducer, applyMiddleware(thunk))
 
   if (typeof window !== 'undefined') {
     store = _store
