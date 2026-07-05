@@ -1,31 +1,15 @@
-import {
-  applyMiddleware,
-  combineReducers,
-  compose,
-  legacy_createStore as createStore,
-} from 'redux'
-import { thunk } from 'redux-thunk'
-import { accountReducer } from '@/app/features/accounts/account-slice'
-import { customerReducer } from '@/app/features/customers/customer-slice'
+import accountReducer from '@/app/features/accounts/account-slice'
+import customerReducer from '@/app/features/customers/customer-slice'
 import { useDispatch, useSelector } from 'react-redux'
-
-const rootReducer = combineReducers({
-  account: accountReducer,
-  customer: customerReducer,
-})
-
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose
-  }
-}
-
-// redux devtools
-const composeEnhancers =
-  typeof window !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose
+import { configureStore } from '@reduxjs/toolkit'
 
 export const makeStore = () => {
-  const _store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
+  const _store = configureStore({
+    reducer: {
+      account: accountReducer,
+      customer: customerReducer,
+    },
+  })
 
   if (typeof window !== 'undefined') {
     store = _store

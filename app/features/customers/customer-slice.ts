@@ -1,76 +1,42 @@
-/**
- * Types
- */
-// initial state
-type CustomerState = {
-  fullName: string
-  nationalId: string
-  createdAt: string
-}
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-// set of actions
-type CreateCustomerAction = {
-  type: 'customer/createCustomer'
-  payload: CustomerState
-}
-
-type UpdateNameAction = {
-  type: 'customer/updateName'
-  payload: string
-}
-
-type CustomerAction = CreateCustomerAction | UpdateNameAction
-
-/**
- * Initial State
- */
-const initialStateCustomer = {
+const initialState = {
   fullName: '',
   nationalId: '',
   createdAt: '',
 }
 
-/**
- * Reducers must be pure functions, without API calls
- * For an unrecognized action, it should return the state unmodified (to be compatible with `combineReducers`)
- * If the given state is undefined, it should return an initial state that is not undefined.
- */
-export const customerReducer = (
-  state: CustomerState = initialStateCustomer,
-  action: CustomerAction,
-) => {
-  switch (action.type) {
-    case 'customer/createCustomer':
-      return { ...state, ...action.payload }
+const customerSlice = createSlice({
+  name: 'customer',
+  initialState,
+  reducers: {
+    createCustomer: {
+      prepare(fullName: string, nationalId: string) {
+        return {
+          payload: {
+            fullName,
+            nationalId,
+            createdAt: new Date().toISOString(),
+          },
+        }
+      },
 
-    case 'customer/updateName':
-      return { ...state, fullName: action.payload }
-
-    default:
-      return state
-  }
-}
-
-/**
- * Actions creators - это соглашение, работать можно и без них,
- * это функции, возвращающие actions
- * для каждого action, создаем свой action creator
- * возвращает action, а action это объект
- */
-export function createCustomer(fullName: string, nationalId: string): CreateCustomerAction {
-  return {
-    type: 'customer/createCustomer',
-    payload: {
-      fullName,
-      nationalId,
-      createdAt: new Date().toISOString(),
+      reducer(
+        state,
+        action: PayloadAction<{ fullName: string; nationalId: string; createdAt: string }>,
+      ) {
+        state.fullName = action.payload.fullName
+        state.nationalId = action.payload.nationalId
+        state.createdAt = action.payload.createdAt
+      },
     },
-  }
-}
 
-export function updateName(fullName: string) {
-  return {
-    type: 'customer/updateName',
-    payload: fullName,
-  } as const
-}
+    updateName(state, action: PayloadAction<string>) {
+      state.fullName = action.payload
+    },
+  },
+})
+
+export const { createCustomer, updateName } = customerSlice.actions
+
+export default customerSlice.reducer
